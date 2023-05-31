@@ -4,21 +4,21 @@
 using namespace std;
 
 // parameters for EC-EC dynamics
+// Timescale 1.0e4 sec
 const int N = 101;    // Number of grid points
-const double L = 1000.0; // Length of domain
-const double T = 1.0; // Final time
+const double L = 1.0; // Length of domain
 const double dx = L / (N-1); // Grid spacing
-const double t_lambda = 5.0e4;
-const double dt = 0.01*t_lambda;    // Time step
-const double D_phi = 1.0e-8;   // Transport Coefficient
-const double kb = 1.0e-5; // birth rate
+const double t_lambda = 5.0e-1;
+const double dt = 0.001*t_lambda;    // Time step
+const double D_phi = 1.0e-9;   // Transport Coefficient
+const double kb = 1.0; // birth rate
 const double a = 1.0;
 
 const int iter = 10000; // timesteps
 
 // parameters for colored noise
-const double vs = 0.007; // self propulsion speed
-const double Tp = 1.0e4; // persistent time
+const double vs = 0.07; // self propulsion speed
+const double Tp = 1.0; // persistent time
 
 
 double u[N]; // current values
