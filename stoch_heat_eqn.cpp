@@ -7,18 +7,18 @@ using namespace std;
 // Timescale 1.0e4 sec
 const int N = 101;    // Number of grid points
 const double L = 1.0; // Length of domain
-const double dx = L / (N-1); // Grid spacing
+const double dx = L/(N-1); // Grid spacing
 const double t_lambda = 5.0e-1;
 const double dt = 0.001*t_lambda;    // Time step
 const double D_phi = 1.0e-9;   // Transport Coefficient
 const double kb = 1.0; // birth rate
-const double a = 1.0;
+const double a = 1.0; // noise term (1 turn on & 0 turn off)
 
 const int iter = 10000; // timesteps
 
 // parameters for colored noise
 const double vs = 0.07; // self propulsion speed
-const double Tp = 1.0; // persistent time
+const double Tp = 0.1; // persistent time
 
 
 double u[N]; // current values
@@ -81,7 +81,10 @@ void bc(){
 void stoch_heat_eqn_solver(){
 	ofstream fout("pde_data.txt");
 	ofstream fout2("x_axis.txt");
-	ofstream fout3("noise_term.text");
+	ofstream fout3("noise_term.txt");
+	ofstream ou("ou_process.txt");
+
+	ou << 0 << endl;
 
 	// x axis data
 	fout2 << "x axis" << endl;
@@ -95,6 +98,8 @@ void stoch_heat_eqn_solver(){
 
 	init();
 	bc();
+
+	//ou << xi[0] << endl;
 
 	// store initial data
 	for(int i=0;i<N;i++){
@@ -137,12 +142,17 @@ void stoch_heat_eqn_solver(){
 			xi[i] += dxi[i];
 			div_noise[i] = (xi[i] + white_noise.dev())*sqrt(un[i]);
 		}
+		if (j==1000){
+			for (int i=0;i<N;i++){
+				ou << xi[i] << endl;
+			}
+		}
+		//ou << xi[0] << endl; // store ou process values for first coordinate
 	}
 }
 
 int main(){
 	//colored_noise();
-
 	stoch_heat_eqn_solver();
 	/*Normaldev rand(0,sqrt(2*0.0001),time(0));
 	ofstream fout3("gaussian_noise.txt");
