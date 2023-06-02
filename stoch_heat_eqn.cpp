@@ -4,21 +4,21 @@
 using namespace std;
 
 // parameters for EC-EC dynamics
-// Timescale 1.0e4 sec
+// Timescale 5e4
 const int N = 101;    // Number of grid points
 const double L = 1.0; // Length of domain
-const double dx = L/(N-1); // Grid spacing
-const double t_lambda = 5.0e-1;
+const double dx = 1; // Grid spacing
+const double t_lambda = 1.0;
 const double dt = 0.001*t_lambda;    // Time step
-const double D_phi = 1.0e-9;   // Transport Coefficient
-const double kb = 1.0; // birth rate
+const double D_phi = 5.0e-6;   // Transport Coefficient
+const double kb = 0.5; // birth rate
 const double a = 1.0; // noise term (1 turn on & 0 turn off)
 
 const int iter = 10000; // timesteps
 
 // parameters for colored noise
-const double vs = 0.07; // self propulsion speed
-const double Tp = 0.1; // persistent time
+const double vs = 35.0; // self propulsion speed
+const double Tp = 0.20; // persistent time
 
 
 double u[N]; // current values
@@ -31,6 +31,7 @@ double div_noise[N];
 // define noise variables
 Normaldev white_noise(0,sqrt(dt),time(0));
 Normaldev stationary(0,vs/sqrt(2.0),time(0));
+Ran ran(time(0));
 
 // Initial condition
 void init(){
@@ -39,10 +40,10 @@ void init(){
 		xi[i] = stationary.dev();
 
 		//u[i] = exp(-pow((i*dx-L/2), 2) / 0.1); // Gaussian pulse centered in the middle of domain
-		u[i] = 1/L; // uniform density
+		u[i] = 10.0/100.0 + (1/100.0)*(ran.doub()-0.5); // uniform density
 		un[i] = u[i];
 
-		div_noise[i] = (xi[i] + white_noise.dev())*sqrt(u[i]);
+		div_noise[i] = (xi[i] + white_noise.dev())*sqrt(un[i]);
 
 	}
 }
